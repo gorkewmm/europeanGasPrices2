@@ -28,7 +28,7 @@ namespace WebAPI.Service.Concrete
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("API bağlantı hatası");
+                throw new Exception($"API hata döndürdü! Durum Kodu: {response.StatusCode} - Nedeni: {response.ReasonPhrase}");
             }
 
             var json = await response.Content.ReadAsStringAsync();
