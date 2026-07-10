@@ -32,11 +32,11 @@ namespace DataAccess.Concrete.EntityFramework
             return base.SaveChanges();
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            SetAuditProperties();
-            return await base.SaveChangesAsync(cancellationToken);
-        }
+        //public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        //{
+        //    SetAuditProperties();
+        //    return await base.SaveChangesAsync(cancellationToken);
+        //}
 
         private void SetAuditProperties()
         {

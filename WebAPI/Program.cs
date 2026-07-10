@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddScoped<IFuelPriceService, FuelPriceManager>();
 builder.Services.AddScoped<IFuelPriceDal, EfFuelPriceDal>();
-builder.Services.AddScoped<IFuelPriceApiService, FuelPriceApiManager>();
+builder.Services.AddScoped<IFuelImportService, FuelImportManager>();
 
 builder.Services.AddHttpClient();
 

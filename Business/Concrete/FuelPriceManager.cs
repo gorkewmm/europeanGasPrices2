@@ -196,37 +196,37 @@ namespace Business.Concrete
 
             foreach (var dto in fuelPriceDtos)
             {
-                var current = _fuelPriceDal.Get(x =>
-                    x.Country == dto.Country);
+                //var current = _fuelPriceDal.Get(x =>
+                //    x.Country == dto.Country);
 
 
                 // Yeni kayıt
-                if (current == null)
-                {
+                
                     var entity = FuelPriceMapper.ToEntity(dto);
-                    entity.CreatedDate = DateTime.Now;  
+                    entity.CreatedDate = DateTime.Now;
+                    entity.UpdatedDate = DateTime.Now;
+                    //entity.PriceDate = DateTime.Now;
 
                     _fuelPriceDal.Add(entity);
-                }
+                
 
 
                 // Mevcut kayıt güncelle
-                else
-                {
-                    var entity = FuelPriceMapper.ToEntity(dto);
+                //else
+                //{
+                //    var entity = FuelPriceMapper.ToEntity(dto);
 
 
-                    current.Currency = entity.Currency;
-                    current.Gasoline = entity.Gasoline;
-                    current.Diesel = entity.Diesel;
-                    current.Lpg = entity.Lpg;
-                    current.UpdatedDate = DateTime.Now;    
-                    current.PriceDate = DateTime.Now;
+                //    current.Currency = entity.Currency;
+                //    current.Gasoline = entity.Gasoline;
+                //    current.Diesel = entity.Diesel;
+                //    current.Lpg = entity.Lpg;
+                //    current.UpdatedDate = DateTime.Now;    
+                //    current.PriceDate = DateTime.Now;
 
-                    _fuelPriceDal.Update(current);
-                }
+                //    _fuelPriceDal.Update(current);
+                //}
             }
-
 
             return new SuccessResult("API verileri başarıyla aktarıldı.");
         }

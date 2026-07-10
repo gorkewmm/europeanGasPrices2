@@ -9,18 +9,18 @@ namespace WebAPI.Controllers
     [ApiController]
     public class FuelImportController : ControllerBase
     {
-        private readonly IFuelPriceApiService _fuelPriceApiService;
+        private readonly IFuelImportService _fuelImportService;
 
-        public FuelImportController(IFuelPriceApiService fuelPriceApiService)
+        public FuelImportController(IFuelImportService fuelImportService)
         {
-            _fuelPriceApiService = fuelPriceApiService;
+            _fuelImportService = fuelImportService;
         }
 
         [HttpPost("import")]
         public async Task<IActionResult> ImportFromApi()
         {
             // Bu metot artık arkada hem çekecek hem kaydedecek, Controller sadece sonucu bekler.
-            var result = await _fuelPriceApiService.ImportAndSaveFuelPricesAsync();
+            var result = await _fuelImportService.ImportAndSaveFuelPricesAsync();
 
             if (result.Success)
             {

@@ -6,11 +6,11 @@ using WebAPI.Service.Abstract;
 
 namespace WebAPI.Service.Concrete
 {
-    public class FuelPriceApiManager : IFuelPriceApiService
+    public class FuelImportManager : IFuelImportService
     {
         private readonly HttpClient _httpClient;
         private readonly IFuelPriceService _fuelPriceService;
-        public FuelPriceApiManager(HttpClient httpClient, IFuelPriceService fuelPriceService)
+        public FuelImportManager(HttpClient httpClient, IFuelPriceService fuelPriceService)
         {
             _httpClient = httpClient;
             _fuelPriceService = fuelPriceService;
