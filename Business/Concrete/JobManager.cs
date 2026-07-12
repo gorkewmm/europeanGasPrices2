@@ -19,23 +19,24 @@ namespace Business.Concrete
         }
         public void Jobs()
         {
+            RemoveJobs();
             try
             {
                 _logger.LogInformation("Aktif recurring job'lar Hangfire'a kaydediliyor...");
 
-                //RecurringJob.AddOrUpdate<IFuelImportService>(
-                //    "OtomatikAkaryakitVeriCekmeGörevi5",
-                //    x => x.ImportAndSaveFuelPricesAsync(),
-                //    "55 12 * * *",
-                //    new RecurringJobOptions
-                //    {
-                //        TimeZone = TimeZoneInfo.Local
-                //    });
+                RecurringJob.AddOrUpdate<IFuelImportService>(
+                    "OtomatikAkaryakitVeriCekmeGörevi",
+                    x => x.ImportAndSaveFuelPricesAsync(),
+                    "00 20 * * *",
+                    new RecurringJobOptions
+                    {
+                        TimeZone = TimeZoneInfo.Local
+                    });
 
                 RecurringJob.AddOrUpdate<IFuelImportService>(
-                    "OtomatikAkaryakitVeriCekmeGörevi6",
+                    "OtomatikAkaryakitVeriCekmeGörevi2",
                     x => x.ImportAndSaveFuelPricesAsync(),
-                    "54 12 * * *",
+                    "00 00 * * *",
                     new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
@@ -56,11 +57,8 @@ namespace Business.Concrete
         {
             try
             {
-                RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi");
-                RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi2");
-                RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi3");
-                RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi4");
-                RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi5");
+                //RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi");
+                //RecurringJob.RemoveIfExists("OtomatikAkaryakitVeriCekmeGörevi2");
 
                 _logger.LogInformation("Eski recurring job'lar temizlendi.");
             }
