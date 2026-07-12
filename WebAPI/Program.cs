@@ -16,6 +16,8 @@ builder.Services.AddScoped<IFuelPriceService, FuelPriceManager>();
 builder.Services.AddScoped<IFuelPriceDal, EfFuelPriceDal>();
 builder.Services.AddHttpClient<IFuelImportService, FuelImportManager>();
 
+builder.Services.AddScoped<IJobService, JobManager>();
+
 builder.Services.AddHttpClient();
 
 // InitialContext'i SQL Server kullanacak şekilde IoC Container'a kaydediyoruz
@@ -48,53 +50,16 @@ app.UseAuthorization();
 
 app.UseHangfireDashboard();
 
-//// Benden istenilen otomatik tetikleme için Hangfire kullanıcam..
-RecurringJob.AddOrUpdate<IFuelImportService>(
-    "OtomatikAkaryakitVeriCekmeGörevi",
-    x => x.ImportAndSaveFuelPricesAsync(),
-    "57 16 * * *",
-    new RecurringJobOptions
-    {
-        TimeZone = TimeZoneInfo.Local
-    });
+using (var scope = app.Services.CreateScope())
+{
+    var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
 
-//RecurringJob.AddOrUpdate<IFuelImportService>(
-//    "OtomatikAkaryakitVeriCekmeGörevi2",
-//    x => x.ImportAndSaveFuelPricesAsync(),
-//    "14 16 * * *",
-//    new RecurringJobOptions
-//    {
-//        TimeZone = TimeZoneInfo.Local
-//    });
+    // Önce eski istemediğin jobları temizler
+    jobService.RemoveJobs();
 
-//RecurringJob.AddOrUpdate<IFuelImportService>(
-//    "OtomatikAkaryakitVeriCekmeGörevi3",
-//    x => x.ImportAndSaveFuelPricesAsync(),
-//    "30 16 * * *",
-//    new RecurringJobOptions
-//    {
-//        TimeZone = TimeZoneInfo.Local
-//    });
-
-//RecurringJob.AddOrUpdate<IFuelImportService>(
-//    "OtomatikAkaryakitVeriCekmeGörevi4",
-//    x => x.ImportAndSaveFuelPricesAsync(),
-//    "31 16 * * *",
-//    new RecurringJobOptions
-//    {
-//        TimeZone = TimeZoneInfo.Local
-//    });
-
-
-RecurringJob.AddOrUpdate<IFuelImportService>(
-    "OtomatikAkaryakitVeriCekmeGörevi5",
-    x => x.ImportAndSaveFuelPricesAsync(),
-    "03 17 * * *",
-    new RecurringJobOptions
-    {
-        TimeZone = TimeZoneInfo.Local
-    });
-
+    // Sonra güncel jobları kaydeder/günceller
+    jobService.Jobs();
+}
 
 app.MapControllers();
 

@@ -20,9 +20,10 @@ namespace DataAccess.Concrete.EntityFramework
             if (!optionsBuilder.IsConfigured)
             {
                 // ÖRNEK: Initial Catalog=EpdkByCountries; kısmını ekledik. Kendi DB adınızı yazın.
-                optionsBuilder.UseSqlServer("Data Source=.\\SQLEXPRESS;Initial Catalog=EpdkByCountries;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Application Name=\"SQL Server Management Studio\";Command Timeout=0");
+                optionsBuilder.UseSqlServer("Data Source=HALILGORKEM;Initial Catalog=EpdkByCountries;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Application Name=\"SQL Server Management Studio\";Command Timeout=0");
             }
         }
+
 
         public DbSet<FuelPrice> FuelPrices { get; set; }
 
