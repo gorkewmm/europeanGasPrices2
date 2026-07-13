@@ -27,7 +27,7 @@ namespace Business.Concrete
                 RecurringJob.AddOrUpdate<IFuelImportService>(
                     "OtomatikAkaryakitVeriCekmeGörevi",
                     x => x.ImportAndSaveFuelPricesAsync(),
-                    "13 10 * * *",
+                    "35 17 * * *",
                     new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
@@ -36,7 +36,7 @@ namespace Business.Concrete
                 RecurringJob.AddOrUpdate<IFuelImportService>(
                     "OtomatikAkaryakitVeriCekmeGörevi2",
                     x => x.ImportAndSaveFuelPricesAsync(),
-                    "30 17 * * *",
+                    "36 17 * * *",
                     new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
