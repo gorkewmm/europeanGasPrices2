@@ -27,6 +27,9 @@ namespace DataAccess.Concrete.EntityFramework
         }
 
         public DbSet<FuelPrice> FuelPrices { set; get; }
+        public DbSet<OperationClaim> OperationClaims { set; get; }
+        public DbSet<User> Users { set; get; }
+        public DbSet<UserOperationClaim> UserOperationClaims { set; get; }
 
         public override int SaveChanges()
         {
@@ -91,6 +94,43 @@ namespace DataAccess.Concrete.EntityFramework
 
                 entity.HasIndex(x => new { x.Country, x.PriceDate })
                       .IsUnique();
+            });
+            // 1. USER YAPILANDIRMASI
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasKey(u => u.Id);
+                entity.Property(u => u.FirstName).IsRequired().HasMaxLength(50);
+                entity.Property(u => u.LastName).IsRequired().HasMaxLength(50);
+                entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
+                entity.HasIndex(u => u.Email).IsUnique();
+                entity.Property(u => u.PasswordHash).IsRequired();
+                entity.Property(u => u.PasswordSalt).IsRequired();
+                entity.Property(u => u.Status).HasDefaultValue(true);
+            });
+
+            // 2. OPERATION CLAIM (ROL) YAPILANDIRMASI
+            modelBuilder.Entity<OperationClaim>(entity =>
+            {
+                entity.HasKey(oc => oc.Id);
+                entity.Property(oc => oc.Name).IsRequired().HasMaxLength(100);
+            });
+
+            // 3. USER OPERATION CLAIM (ARA TABLO) YAPILANDIRMASI
+            modelBuilder.Entity<UserOperationClaim>(entity =>
+            {
+                entity.HasKey(uoc => uoc.Id);
+
+                entity.HasOne<User>()
+                      .WithMany()
+                      .HasForeignKey(uoc => uoc.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne<OperationClaim>()
+                      .WithMany()
+                      .HasForeignKey(uoc => uoc.OperationClaimId)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(uoc => new { uoc.UserId, uoc.OperationClaimId }).IsUnique();
             });
         }
     }
