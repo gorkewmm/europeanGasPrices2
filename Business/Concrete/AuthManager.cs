@@ -13,10 +13,12 @@ namespace Business.Concrete
     public class AuthManager : IAuthService
     {
         private readonly IUserService _userService;
+        private readonly ITokenHelper _tokenHelper;
 
-        public AuthManager(IUserService userService)
+        public AuthManager(IUserService userService, ITokenHelper tokenHelper)
         {
             _userService = userService;
+            _tokenHelper = tokenHelper;
         }
 
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
@@ -32,6 +34,7 @@ namespace Business.Concrete
                 PasswordSalt = passwordSalt,
                 Status = true
             };
+            _userService.Add(user);
             return new SuccessDataResult<User>(user, "Kullanıcı başarıyla kaydoldu.");
         }
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
@@ -59,7 +62,9 @@ namespace Business.Concrete
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
-            throw new NotImplementedException();
+            var claims = _userService.GetClaims(user);
+            var accessToken = _tokenHelper.CreateToken(user, claims);
+            return new SuccessDataResult<AccessToken>(accessToken, "Token oluşturuldu.");
         }
     }
 }
