@@ -27,7 +27,7 @@ namespace Business.Concrete
                 RecurringJob.AddOrUpdate<IFuelImportService>(
                     "OtomatikAkaryakitVeriCekmeGörevi",
                     x => x.ImportAndSaveFuelPricesAsync(),
-                    "00 20 * * *",
+                    "13 10 * * *",
                     new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
@@ -36,7 +36,7 @@ namespace Business.Concrete
                 RecurringJob.AddOrUpdate<IFuelImportService>(
                     "OtomatikAkaryakitVeriCekmeGörevi2",
                     x => x.ImportAndSaveFuelPricesAsync(),
-                    "00 00 * * *",
+                    "30 17 * * *",
                     new RecurringJobOptions
                     {
                         TimeZone = TimeZoneInfo.Local
@@ -50,9 +50,7 @@ namespace Business.Concrete
             }
         }
 
-        /// <summary>
-        /// Eski/kullanılmayan job'ları Hangfire'dan kaldırır.
-        /// </summary>
+        
         public void RemoveJobs()
         {
             try
@@ -64,7 +62,7 @@ namespace Business.Concrete
             }
             catch (Exception ex)
             {
-                // Görseldeki gibi: İlk çalıştırmada joblar veritabanında hiç olmayabileceği için Warning (Uyarı) seviyesinde logluyoruz
+                // İlk çalıştırmada joblar veritabanında hiç olmayabileceği için Warning (Uyarı) seviyesinde logluyoruz
                 _logger.LogWarning(ex, "Eski job'lar temizlenirken hata oluştu (ilk çalıştırma olabilir).");
             }
 
