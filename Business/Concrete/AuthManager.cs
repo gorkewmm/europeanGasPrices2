@@ -32,7 +32,8 @@ namespace Business.Concrete
                 LastName = userForRegisterDto.LastName,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                Status = true
+                Status = true,
+                NickName = userForRegisterDto.NickName
             };
             _userService.Add(user);
             return new SuccessDataResult<User>(user, "Kullanıcı başarıyla kaydoldu.");
@@ -40,22 +41,31 @@ namespace Business.Concrete
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
             var userToCheck = _userService.GetByMail(userForLoginDto.Email);
-            if(userToCheck == null)
+            if (userToCheck == null)
             {
                 return new ErrorDataResult<User>("Kullanıcı bulunamadı.");
             }
 
-            if(!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
             {
                 return new ErrorDataResult<User>("Parola hatalı.");
-            } 
+            }
             return new SuccessDataResult<User>(userToCheck, "Giriş başarılı.");
         }
         public IResult UserExists(string email)
         {
-            if(_userService.GetByMail(email) != null)
+            if (_userService.GetByMail(email) != null)
             {
                 return new ErrorResult("Kullanıcı zaten mevcut.");
+            }
+            return new SuccessResult();
+        }
+
+        public IResult NickNameExists(string nickName)
+        {
+            if (_userService.GetByNickName(nickName) != null)
+            {
+                return new ErrorResult("Bu kullanıcı adı (NickName) zaten alınmış.");
             }
             return new SuccessResult();
         }

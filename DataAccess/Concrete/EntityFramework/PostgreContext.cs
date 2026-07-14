@@ -103,6 +103,10 @@ namespace DataAccess.Concrete.EntityFramework
                 entity.Property(u => u.LastName).IsRequired().HasMaxLength(50);
                 entity.Property(u => u.Email).IsRequired().HasMaxLength(100);
                 entity.HasIndex(u => u.Email).IsUnique();
+
+                entity.Property(u => u.NickName).IsRequired().HasMaxLength(50);
+                entity.HasIndex(u => u.NickName).IsUnique();
+
                 entity.Property(u => u.PasswordHash).IsRequired();
                 entity.Property(u => u.PasswordSalt).IsRequired();
                 entity.Property(u => u.Status).HasDefaultValue(true);
