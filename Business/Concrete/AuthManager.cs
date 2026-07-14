@@ -23,6 +23,19 @@ namespace Business.Concrete
 
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
         {
+            // 1. E-posta kontrolü
+            var userExists = UserExists(userForRegisterDto.Email);
+            if (!userExists.Success)
+            {
+                return new ErrorDataResult<User>(userExists.Message);
+            }
+
+            // 2. NickName kontrolü
+            var nickNameExists = NickNameExists(userForRegisterDto.NickName);
+            if (!nickNameExists.Success)
+            {
+                return new ErrorDataResult<User>(nickNameExists.Message);
+            }
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             var user = new User
@@ -69,7 +82,7 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-
+        
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);

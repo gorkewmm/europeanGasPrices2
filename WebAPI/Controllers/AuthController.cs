@@ -37,22 +37,14 @@ namespace WebAPI.Controllers
         [HttpPost("register")]
         public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
-            // 1. E-posta kontrolü
-            var userExists = _authService.UserExists(userForRegisterDto.Email);
-            if (!userExists.Success)
-            {
-                return BadRequest(userExists.Message);
-            }
-
-            // 2. NickName kontrolü
-            var nickNameExists = _authService.NickNameExists(userForRegisterDto.NickName);
-            if (!nickNameExists.Success)
-            {
-                return BadRequest(nickNameExists.Message);
-            }
-
-            // 3. Kayıt ve Token oluşturma işlemleri
+           
+            // Kayıt ve Token oluşturma işlemleri
             var registerResult = _authService.Register(userForRegisterDto, userForRegisterDto.Password);
+            if (!registerResult.Success)
+            {
+                return BadRequest(registerResult.Message);
+            }
+
             var result = _authService.CreateAccessToken(registerResult.Data);
             if (result.Success)
             {
