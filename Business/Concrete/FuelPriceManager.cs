@@ -203,8 +203,7 @@ namespace Business.Concrete
                 // Yeni kayıt
                 
                     var entity = FuelPriceMapper.ToEntity(dto);
-
-                    entity.PriceDate = DateTime.Now;
+               
                     entity.CreatedDate = DateTime.Now;
                     entity.UpdatedDate = DateTime.Now;
 
