@@ -67,6 +67,10 @@ namespace Business.Concrete
         }
         public IResult UserExists(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return new ErrorResult("e-mail boş olamaz");
+            }
             if (_userService.GetByMail(email) != null)
             {
                 return new ErrorResult("Kullanıcı zaten mevcut.");
@@ -76,6 +80,10 @@ namespace Business.Concrete
 
         public IResult NickNameExists(string nickName)
         {
+            if (string.IsNullOrWhiteSpace(nickName))
+            {
+                return new ErrorResult("Kullanıcı adı boş olamaz");
+            }
             if (_userService.GetByNickName(nickName) != null)
             {
                 return new ErrorResult("Bu kullanıcı adı (NickName) zaten alınmış.");
