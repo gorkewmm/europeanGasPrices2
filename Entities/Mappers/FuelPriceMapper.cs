@@ -14,8 +14,7 @@ namespace Entities.Mappers
                 Currency = dto.Currency,
                 Gasoline = ParseDecimal(dto.Gasoline),
                 Diesel = ParseDecimal(dto.Diesel),
-                Lpg = ParseDecimal(dto.Lpg),
-                PriceDate = DateTime.Now
+                Lpg = ParseDecimal(dto.Lpg)
             };
         }
 
