@@ -34,6 +34,16 @@ builder.Services.AddScoped<IOperationClaimPermissionDal, EfOperationClaimPermiss
 builder.Services.AddScoped<IPermissionService, PermissionManager>();
 builder.Services.AddScoped<IOperationClaimPermissionService, OperationClaimPermissionManager>();
 
+builder.Services.AddScoped<IOperationClaimDal, EfOperationClaimDal>();
+builder.Services.AddScoped<IOperationClaimService, OperationClaimManager>();
+
+builder.Services.AddScoped<IUserOperationClaimDal, EfUserOperationClaimDal>();
+builder.Services.AddScoped<IUserOperationClaimService, UserOperationClaimManager>();
+
+builder.Services.AddScoped<IOperationClaimPermissionDal, EfOperationClaimPermissionDal>();
+builder.Services.AddScoped<IOperationClaimPermissionService, OperationClaimPermissionManager>();
+
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();

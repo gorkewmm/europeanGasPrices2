@@ -35,5 +35,24 @@ namespace Business.Concrete
         {
             return _userDal.Get(u => u.NickName == nickName);
         }
+
+
+        // YENİ: Kullanıcı bilgilerini güncelleme metodu
+        public void Update(User user)
+        {
+            _userDal.Update(user);
+        }
+
+        // YENİ: Kullanıcı silme metodu (Repository'deki Soft-Delete'i tetikler)
+        public void Delete(User user)
+        {
+            _userDal.Delete(user);
+        }
+
+        // YENİ: ID ile aktif kullanıcıyı bulma metodu
+        public User GetById(int id)
+        {
+            return _userDal.Get(u => u.Id == id && u.IsDeleted == false);
+        }
     }
 }

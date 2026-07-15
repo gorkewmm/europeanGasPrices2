@@ -11,5 +11,9 @@ namespace Business.Abstract
         User GetByMail(string email);
         User GetByNickName(string nickName);
         List<OperationClaim> GetClaims(User user);
+        void Update(User user); // Yeni
+        void Delete(User user); // Yeni
+        User GetById(int id);   // Yeni (Silme ve Güncelleme öncesi kontrol için şart)
+
     }
 }
