@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Core.Entities.Concrete
 {
-    public class OperationClaim : IEntity
+    public class OperationClaim : BaseEntity, IEntity
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         public string Name { get; set; }
     }
 }

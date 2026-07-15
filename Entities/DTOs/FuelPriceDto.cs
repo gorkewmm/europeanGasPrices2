@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Entities.DTOs
 {
-    public class FuelPriceDto: IDto
+    public class FuelPriceDto : IDto
     {
         public string Country { get; set; } = null!;
 

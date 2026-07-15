@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Entities.Concrete
 {
-    public class FuelPrice : BaseEntity , IEntity
+    public class FuelPrice : BaseEntity, IEntity
     {
         public string Country { get; set; } = null!;
 

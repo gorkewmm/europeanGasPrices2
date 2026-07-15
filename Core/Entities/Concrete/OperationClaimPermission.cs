@@ -4,10 +4,9 @@ using System.Text;
 
 namespace Core.Entities.Concrete
 {
-    public class UserOperationClaim : BaseEntity, IEntity
+    public class OperationClaimPermission : BaseEntity
     {
-        //public int Id { get; set; }
-        public int UserId { get; set; }
         public int OperationClaimId { get; set; }
+        public int PermissionId { get; set; }
     }
 }

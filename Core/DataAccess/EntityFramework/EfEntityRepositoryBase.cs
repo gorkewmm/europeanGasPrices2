@@ -12,38 +12,58 @@ namespace Core.DataAccess.EntityFramework
         where TContext : DbContext, new()
     {
         protected readonly TContext _context;
-
-        // Constructor (Yapıcı Metot) içinde tek bir kez instance alıyoruz
-        public EfEntityRepositoryBase()
-        {
-            _context = new TContext();
-        }
         public void Add(TEntity entity)
         {
-            _context.Set<TEntity>().Add(entity);
-            _context.SaveChanges();
+            using (TContext context = new TContext())
+            {
+                // Entity context'e eklenir; EF Core ChangeTracker bunu otomatik "Added" olarak işaretler.
+                context.Set<TEntity>().Add(entity);
+                context.SaveChanges(); // PostgreContext içindeki ChangeTracker tetiklenir, CreatedDate doldurulur.
+            }
+        }
+
+        public void Update(TEntity entity)
+        {
+            using (TContext context = new TContext())
+            {
+                // Entity güncellenir; EF Core ChangeTracker bunu otomatik "Modified" olarak işaretler.
+                context.Set<TEntity>().Update(entity);
+                context.SaveChanges(); // PostgreContext içindeki ChangeTracker tetiklenir, UpdatedDate doldurulur.
+            }
         }
 
         public void Delete(TEntity entity)
         {
-            _context.Set<TEntity>().Remove(entity);
-            _context.SaveChanges();
+            using (TContext context = new TContext())
+            {
+                // Entity silinmek üzere işaretlenir; EF Core ChangeTracker bunu otomatik "Deleted" olarak işaretler.
+                context.Set<TEntity>().Remove(entity);
+
+                // SaveChanges çağrıldığı an PostgreContext'teki SetAuditProperties() devreye girer:
+                // State'in "Deleted" olduğunu görür, bunu "Modified" olarak değiştirir, 
+                // IsDeleted = true yapar ve DeletedDate alanını doldurarak Soft-Delete işlemini tamamlar.
+                context.SaveChanges();
+            }
         }
-        public void Update(TEntity entity)
-        {
-            _context.Set<TEntity>().Update(entity);
-            _context.SaveChanges();
-        }
+
         public TEntity Get(Expression<Func<TEntity, bool>> filter)
         {
-            return _context.Set<TEntity>().SingleOrDefault(filter);
+            using (TContext context = new TContext())
+            {
+                // Tek bir kaydı getirirken anlık context oluşturulur ve sorgu tamamlanınca bellek boşaltılır.
+                return context.Set<TEntity>().SingleOrDefault(filter);
+            }
         }
 
         public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
-        {           
+        {
+            using (TContext context = new TContext())
+            {
+                // Filtre varsa filtreye uyanları, yoksa tüm listeyi çeker.
                 return filter == null
-                    ? _context.Set<TEntity>().ToList()
-                    : _context.Set<TEntity>().Where(filter).ToList();   
+                    ? context.Set<TEntity>().ToList()
+                    : context.Set<TEntity>().Where(filter).ToList();
+            }
         }
     }
 }
