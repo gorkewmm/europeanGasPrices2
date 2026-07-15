@@ -24,23 +24,23 @@ namespace Business.Concrete
             {
                 _logger.LogInformation("Aktif recurring job'lar Hangfire'a kaydediliyor...");
 
-                RecurringJob.AddOrUpdate<IFuelImportService>(
-                    "OtomatikAkaryakitVeriCekmeGörevi",
-                    x => x.ImportAndSaveFuelPricesAsync(),
-                    "35 17 * * *",
-                    new RecurringJobOptions
-                    {
-                        TimeZone = TimeZoneInfo.Local
-                    });
+                //RecurringJob.AddOrUpdate<IFuelImportService>(
+                //    "OtomatikAkaryakitVeriCekmeGörevi",
+                //    x => x.ImportAndSaveFuelPricesAsync(),
+                //    "35 17 * * *",
+                //    new RecurringJobOptions
+                //    {
+                //        TimeZone = TimeZoneInfo.Local
+                //    });
 
-                RecurringJob.AddOrUpdate<IFuelImportService>(
-                    "OtomatikAkaryakitVeriCekmeGörevi2",
-                    x => x.ImportAndSaveFuelPricesAsync(),
-                    "36 17 * * *",
-                    new RecurringJobOptions
-                    {
-                        TimeZone = TimeZoneInfo.Local
-                    });
+                //RecurringJob.AddOrUpdate<IFuelImportService>(
+                //    "OtomatikAkaryakitVeriCekmeGörevi2",
+                //    x => x.ImportAndSaveFuelPricesAsync(),
+                //    "36 17 * * *",
+                //    new RecurringJobOptions
+                //    {
+                //        TimeZone = TimeZoneInfo.Local
+                //    });
 
                 _logger.LogInformation("Aktif recurring job'lar başarıyla kaydedildi.");
             }
