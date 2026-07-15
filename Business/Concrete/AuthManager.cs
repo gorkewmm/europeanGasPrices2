@@ -90,7 +90,7 @@ namespace Business.Concrete
             }
             return new SuccessResult();
         }
-
+        
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
             var claims = _userService.GetClaims(user);

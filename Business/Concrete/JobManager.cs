@@ -50,7 +50,9 @@ namespace Business.Concrete
             }
         }
 
-
+        /// <summary>
+        /// Eski/kullanılmayan job'ları Hangfire'dan kaldırır.
+        /// </summary>
         public void RemoveJobs()
         {
             try

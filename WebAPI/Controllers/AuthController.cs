@@ -37,7 +37,7 @@ namespace WebAPI.Controllers
         [HttpPost("register")]
         public ActionResult Register(UserForRegisterDto userForRegisterDto)
         {
-
+           
             // Kayıt ve Token oluşturma işlemleri
             var registerResult = _authService.Register(userForRegisterDto, userForRegisterDto.Password);
             if (!registerResult.Success)
