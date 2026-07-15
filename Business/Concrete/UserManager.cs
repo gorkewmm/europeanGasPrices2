@@ -54,5 +54,10 @@ namespace Business.Concrete
         {
             return _userDal.Get(u => u.Id == id && u.IsDeleted == false);
         }
+
+        public List<Permission> GetPermissions(User user)
+        {
+            return _userDal.GetPermissions(user);
+        }
     }
 }

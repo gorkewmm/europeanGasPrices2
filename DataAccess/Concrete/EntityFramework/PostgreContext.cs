@@ -31,6 +31,8 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<OperationClaim> OperationClaims { set; get; }
         public DbSet<User> Users { set; get; }
         public DbSet<UserOperationClaim> UserOperationClaims { set; get; }
+        public DbSet<Permission> Permissions { set; get; }
+        public DbSet<OperationClaimPermission> OperationClaimPermissions { set; get; }
 
         public override int SaveChanges()
         {

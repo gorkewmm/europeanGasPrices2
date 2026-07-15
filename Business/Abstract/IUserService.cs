@@ -15,5 +15,6 @@ namespace Business.Abstract
         void Delete(User user); // Yeni
         User GetById(int id);   // Yeni (Silme ve Güncelleme öncesi kontrol için şart)
 
+        List<Permission> GetPermissions(User user);
     }
 }
