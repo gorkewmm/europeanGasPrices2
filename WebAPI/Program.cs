@@ -28,6 +28,12 @@ builder.Services.AddScoped<IUserDal, EfUserDal>();
 builder.Services.AddScoped<IAuthService, AuthManager>();
 builder.Services.AddScoped<ITokenHelper, JwtHelper>();
 
+builder.Services.AddScoped<IPermissionDal, EfPermissionDal>();
+builder.Services.AddScoped<IOperationClaimPermissionDal, EfOperationClaimPermissionDal>();
+
+builder.Services.AddScoped<IPermissionService, PermissionManager>();
+builder.Services.AddScoped<IOperationClaimPermissionService, OperationClaimPermissionManager>();
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
