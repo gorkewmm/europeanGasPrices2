@@ -101,16 +101,19 @@ app.UseAuthorization();
 
 app.UseHangfireDashboard();
 
-using (var scope = app.Services.CreateScope())
-{
-    var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
+//if (!app.Environment.IsDevelopment())
+//{
+//    using (var scope = app.Services.CreateScope())
+//    {
+//        var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
 
-    // Önce eski istemediğin jobları temizler
-    jobService.RemoveJobs();
+//        // Önce eski istemediğin jobları temizler
+//        jobService.RemoveJobs();
 
-    // Sonra güncel jobları kaydeder/günceller
-    jobService.Jobs();
-}
+//        // Sonra güncel jobları kaydeder/günceller
+//        jobService.Jobs();
+//    }
+//}
 
 app.MapControllers();
 

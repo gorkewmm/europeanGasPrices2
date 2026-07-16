@@ -21,9 +21,10 @@ namespace WebAPI.Service.Concrete
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 
-            request.Headers.Add("authorization", "apikey 4Hk3rgvqx1DovXqt3sk9Q7:1YllFKd1uzhe8RkNSCv3rj");
+            request.Headers.Add("authorization", "apikey 5UE1tDNuPMBzqZvrjFS1Wr:4Vdi951lcl8zmDXFNb8Kun");
             
 
+            
             var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
