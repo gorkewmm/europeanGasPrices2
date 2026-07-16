@@ -11,8 +11,8 @@ namespace Business.Abstract
     {
         IDataResult<List<FuelPrice>> GetAll();
         IDataResult<FuelPrice> GetById(int id);
-        IResult Add(FuelPrice fuelPrice);
-        IResult Update(FuelPrice fuelPrice);
+        IResult Add(FuelPriceCreateDto dto);
+        IResult Update(FuelPriceUpdateDto dto);
         IResult Delete(int id);
 
         //Ülkeye göre fiyat yakıtı getirme
@@ -57,7 +57,7 @@ namespace Business.Abstract
         IDataResult<List<FuelPrice>> GetCountriesByGasolineRange(decimal min, decimal max);
 
 
-        IResult AddFromApi(List<FuelPriceDto> fuelPriceDtos);
+        IResult AddFromApi(List<FuelPriceApiDto> fuelPriceDtos);
 
     }
 }

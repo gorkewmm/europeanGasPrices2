@@ -6,7 +6,7 @@ namespace Entities.Mappers
 {
     public static class FuelPriceMapper
     {
-        public static FuelPrice ToEntity(FuelPriceDto dto)
+        public static FuelPrice ToEntity(FuelPriceApiDto dto)
         {
             return new FuelPrice
             {
@@ -17,6 +17,29 @@ namespace Entities.Mappers
                 Lpg = ParseDecimal(dto.Lpg),
                 PriceDate = DateTime.Now
             };
+        }
+        public static FuelPrice ToEntity(FuelPriceCreateDto dto)
+        {
+            return new FuelPrice
+            {
+                Country = dto.Country,
+                Currency = dto.Currency,
+                Gasoline = dto.Gasoline,
+                Diesel = dto.Diesel,
+                Lpg = dto.Lpg,
+                PriceDate = DateTime.Now
+            };
+        }
+
+        public static void UpdateEntity(
+            FuelPrice entity,
+            FuelPriceUpdateDto dto)
+        {
+            entity.Country = dto.Country;
+            entity.Currency = dto.Currency;
+            entity.Gasoline = dto.Gasoline;
+            entity.Diesel = dto.Diesel;
+            entity.Lpg = dto.Lpg;
         }
 
         private static decimal ParseDecimal(string value)

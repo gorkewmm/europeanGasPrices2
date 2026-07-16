@@ -34,6 +34,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
+        [SecuredOperation("fuelprice.create")]
         public IActionResult GetById(int id)
         {
             var result = _fuelPriceService.GetById(id);
@@ -68,9 +69,9 @@ namespace WebAPI.Controllers
 
         [HttpPost("add")]
         [SecuredOperation("admin,manager,fuelprice.create")]
-        public IActionResult Add(FuelPrice fuelPrice)
+        public IActionResult Add(FuelPriceCreateDto fuelPriceCreateDto)
         {
-            var result = _fuelPriceService.Add(fuelPrice);
+            var result = _fuelPriceService.Add(fuelPriceCreateDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -80,9 +81,9 @@ namespace WebAPI.Controllers
 
         [HttpPut("update")]
         [SecuredOperation("admin,fuelprice.update")]
-        public IActionResult Update(FuelPrice fuelPrice)
+        public IActionResult Update(FuelPriceUpdateDto dto)
         {
-            var result = _fuelPriceService.Update(fuelPrice);
+            var result = _fuelPriceService.Update(dto);
             if (result.Success)
             {
                 return Ok(result);
