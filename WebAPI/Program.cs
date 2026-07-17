@@ -86,12 +86,12 @@ builder.Services.AddOpenApi();
 //    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("EpdkByCountries"));
 //});
 
-// Hangfire PostgreSQL bağlantı ayarları
-builder.Services.AddHangfire(config =>
-{
-    config.UsePostgreSqlStorage(c => c.UseNpgsqlConnection(connectionString));
-});
-builder.Services.AddHangfireServer();
+//// Hangfire PostgreSQL bağlantı ayarları
+//builder.Services.AddHangfire(config =>
+//{
+//    config.UsePostgreSqlStorage(c => c.UseNpgsqlConnection(connectionString));
+//});
+//builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 
@@ -113,7 +113,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboard();
+//app.UseHangfireDashboard();
 
 //if (!app.Environment.IsDevelopment())
 //{
