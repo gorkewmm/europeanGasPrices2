@@ -10,5 +10,6 @@ namespace Core.Utilities.Security.JWT
         public DateTime Expiration { get; set; }
 
         public List<string> Claims { get; set; }
+        public List<string> Permissions { get; set; }
     }
 }
