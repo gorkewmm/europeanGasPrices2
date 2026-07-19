@@ -53,17 +53,17 @@ namespace Business.Concrete
         }
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
-            var userToCheck = _userService.GetByMail(userForLoginDto.Email);
-            if (userToCheck == null)
+            var dataResult = _userService.GetByMail(userForLoginDto.Email);
+            if (!dataResult.Success)
             {
                 return new ErrorDataResult<User>("Kullanıcı bulunamadı.");
             }
 
-            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, userToCheck.PasswordHash, userToCheck.PasswordSalt))
+            if (!HashingHelper.VerifyPasswordHash(userForLoginDto.Password, dataResult.Data.PasswordHash, dataResult.Data.PasswordSalt))
             {
                 return new ErrorDataResult<User>("Parola hatalı.");
             }
-            return new SuccessDataResult<User>(userToCheck, "Giriş başarılı.");
+            return new SuccessDataResult<User>(dataResult.Data, "Giriş başarılı.");
         }
         public IResult UserExists(string email)
         {
@@ -71,7 +71,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult("e-mail boş olamaz");
             }
-            if (_userService.GetByMail(email) != null)
+            if (_userService.GetByMail(email).Success)
             {
                 return new ErrorResult("Kullanıcı zaten mevcut.");
             }
@@ -84,7 +84,7 @@ namespace Business.Concrete
             {
                 return new ErrorResult("Kullanıcı adı boş olamaz");
             }
-            if (_userService.GetByNickName(nickName) != null)
+            if (_userService.GetByNickName(nickName).Success)
             {
                 return new ErrorResult("Bu kullanıcı adı (NickName) zaten alınmış.");
             }

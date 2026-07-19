@@ -16,7 +16,7 @@ namespace Business.Abstract
         IResult Delete(int id);
 
         //Ülkeye göre fiyat yakıtı getirme
-        IDataResult<FuelPrice> GetByCountry(string country);
+        IDataResult<List<FuelPrice>> GetByCountry(string country);
 
         //En ucuz benzin fiyatına sahip ülkeleri getirme(ilk count adet ülke)
         IDataResult<List<FuelPrice>> GetCheapestGasolineCountries(int count);

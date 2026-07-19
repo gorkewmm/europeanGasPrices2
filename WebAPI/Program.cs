@@ -83,7 +83,7 @@ builder.Services.AddHangfire(config =>
 {
     config.UsePostgreSqlStorage(c => c.UseNpgsqlConnection(connectionString));
 });
-builder.Services.AddHangfireServer();
+//builder.Services.AddHangfireServer();
 
 var app = builder.Build();
 

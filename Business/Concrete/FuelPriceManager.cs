@@ -80,15 +80,15 @@ namespace Business.Concrete
             return new SuccessDataResult<decimal>(result);
         }
 
-        public IDataResult<FuelPrice> GetByCountry(string country)
+        public IDataResult<List<FuelPrice>> GetByCountry(string country)
         {
-            var result = _fuelPriceDal.Get(x => x.Country == country);
+            var result = _fuelPriceDal.GetAll(x => x.Country == country);
 
             if (result == null)
             {
-                return new ErrorDataResult<FuelPrice>("Ülke bulunamadı");
+                return new ErrorDataResult<List<FuelPrice>>("Ülke bulunamadı");
             }
-            return new SuccessDataResult<FuelPrice>(result);
+            return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
         public IDataResult<List<FuelPrice>> GetByCurrency(string currency)
