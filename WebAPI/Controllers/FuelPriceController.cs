@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Utilities.Security.Security;
 using Entities.Concrete;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
@@ -21,6 +22,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getall")]
+        [SecuredOperation("admin,manager,visitor,fuelprice.getall")]
         public IActionResult GetAll()
         {
             var result = _fuelPriceService.GetAll();
@@ -32,6 +34,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getbyid")]
+        [SecuredOperation("fuelprice.create")]
         public IActionResult GetById(int id)
         {
             var result = _fuelPriceService.GetById(id);
@@ -65,9 +68,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add(FuelPrice fuelPrice)
+        [SecuredOperation("admin,manager,fuelprice.create")]
+        public IActionResult Add(FuelPriceCreateDto fuelPriceCreateDto)
         {
-            var result = _fuelPriceService.Add(fuelPrice);
+            var result = _fuelPriceService.Add(fuelPriceCreateDto);
             if (result.Success)
             {
                 return Ok(result);
@@ -76,9 +80,10 @@ namespace WebAPI.Controllers
         }
 
         [HttpPut("update")]
-        public IActionResult Update(FuelPrice fuelPrice)
+        [SecuredOperation("admin,fuelprice.update")]
+        public IActionResult Update(FuelPriceUpdateDto dto)
         {
-            var result = _fuelPriceService.Update(fuelPrice);
+            var result = _fuelPriceService.Update(dto);
             if (result.Success)
             {
                 return Ok(result);
@@ -87,6 +92,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpDelete("delete/{id}")]
+        [SecuredOperation("admin,fuelprice.update")]
         public IActionResult Delete(int id)
         {
             var result = _fuelPriceService.Delete(id);

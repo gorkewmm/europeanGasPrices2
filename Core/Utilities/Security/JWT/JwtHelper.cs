@@ -34,7 +34,9 @@ namespace Core.Utilities.Security.JWT
             return new AccessToken
             {
                 Token = token,
-                Expiration = _accessTokenExpiration
+                Expiration = _accessTokenExpiration,
+                Claims = operationClaims.Select(oc => oc.Name).ToList(), // Claims listesi operationClaims'ten alınıyor
+                Permissions = permissions.Select(p => p.Name).ToList() // Permissions listesi permissions'ten alınıyor 
             };
         }
 

@@ -5,7 +5,7 @@ namespace WebAPI.Service.Abstract
 {
     public interface IFuelImportService
     {
-        Task<List<FuelPriceDto>> GetFuelPricesFromApi();
+        Task<List<FuelPriceApiDto>> GetFuelPricesFromApi();
         Task<IResult> ImportAndSaveFuelPricesAsync();
     }
 }

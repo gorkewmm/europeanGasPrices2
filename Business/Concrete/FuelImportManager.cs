@@ -15,15 +15,16 @@ namespace WebAPI.Service.Concrete
             _httpClient = httpClient;
             _fuelPriceService = fuelPriceService;
         }
-        public async Task<List<FuelPriceDto>> GetFuelPricesFromApi()
+        public async Task<List<FuelPriceApiDto>> GetFuelPricesFromApi()
         {
             var url = "https://api.collectapi.com/gasPrice/europeanCountries";
 
             var request = new HttpRequestMessage(HttpMethod.Get, url);
 
-            request.Headers.Add("authorization", "apikey 4Hk3rgvqx1DovXqt3sk9Q7:1YllFKd1uzhe8RkNSCv3rj");
+            request.Headers.Add("authorization", "apikey 5UE1tDNuPMBzqZvrjFS1Wr:4Vdi951lcl8zmDXFNb8Kun");
             
 
+            
             var response = await _httpClient.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
@@ -46,15 +47,15 @@ namespace WebAPI.Service.Concrete
         public async Task<IResult> ImportAndSaveFuelPricesAsync()
         {
             // 1. Dış API'den verileri DTO olarak çek
-            List<FuelPriceDto> fuelPriceDtos = await GetFuelPricesFromApi();
+            List<FuelPriceApiDto> fuelPriceApiDtos = await GetFuelPricesFromApi();
 
-            if (fuelPriceDtos == null || fuelPriceDtos.Count == 0)
+            if (fuelPriceApiDtos == null || fuelPriceApiDtos.Count == 0)
             {
                 return new ErrorResult("API'den veri alınamadı.");
             }
 
             // 2. Kendi içindeki diğer Business servisini çağırarak kaydet
-            var result = _fuelPriceService.AddFromApi(fuelPriceDtos);
+            var result = _fuelPriceService.AddFromApi(fuelPriceApiDtos);
 
             return result;
         }

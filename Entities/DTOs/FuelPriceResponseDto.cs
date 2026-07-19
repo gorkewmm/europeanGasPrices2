@@ -9,6 +9,6 @@ namespace Entities.DTOs
     {
         public bool Success { get; set; }
 
-        public List<FuelPriceDto> Result { get; set; } = new();
+        public List<FuelPriceApiDto> Result { get; set; } = new();
     }
 }

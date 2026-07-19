@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(PostgreContext))]
-    [Migration("20260715170718_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260716063649_AddUserPermissionTables")]
+    partial class AddUserPermissionTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

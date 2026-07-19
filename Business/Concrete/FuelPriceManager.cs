@@ -30,16 +30,16 @@ namespace Business.Concrete
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
-        public IResult Add(FuelPrice fuelPrice)
+        public IResult Update(FuelPriceUpdateDto fuelPriceUpdateDto)
         {
-            _fuelPriceDal.Add(fuelPrice);
+            var entity = _fuelPriceDal.Get(x => x.Id == fuelPriceUpdateDto.Id);
+            if (entity == null)
+            {
+                return new ErrorResult("Yakıt fiyatı bulunamadı");
+            }
 
-            return new SuccessResult("Yakıt fiyatı eklendi");
-        }
-
-        public IResult Update(FuelPrice fuelPrice)
-        {
-            _fuelPriceDal.Update(fuelPrice);
+            FuelPriceMapper.UpdateEntity(entity, fuelPriceUpdateDto);
+            _fuelPriceDal.Update(entity);
             return new SuccessResult("Yakıt fiyatı güncellendi");
         }
 
@@ -186,7 +186,7 @@ namespace Business.Concrete
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
-        public IResult AddFromApi(List<FuelPriceDto> fuelPriceDtos)
+        public IResult AddFromApi(List<FuelPriceApiDto> fuelPriceDtos)
         {
             if (fuelPriceDtos == null || fuelPriceDtos.Count == 0)
             {
@@ -229,6 +229,15 @@ namespace Business.Concrete
             }
 
             return new SuccessResult("API verileri başarıyla aktarıldı.");
+        }
+
+        public IResult Add(FuelPriceCreateDto dto)
+        {
+            var entity = FuelPriceMapper.ToEntity(dto);
+
+            _fuelPriceDal.Add(entity);
+
+            return new SuccessResult("Yakıt fiyatı eklendi.");
         }
 
         //public IResult AddFromApi(List<FuelPriceDto> fuelPriceDtos)

@@ -44,6 +44,13 @@ builder.Services.AddScoped<IOperationClaimPermissionDal, EfOperationClaimPermiss
 builder.Services.AddScoped<IOperationClaimPermissionService, OperationClaimPermissionManager>();
 
 
+//Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 var tokenOptions = builder.Configuration.GetSection("TokenOptions").Get<TokenOptions>();
@@ -59,7 +66,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).
             ValidIssuer = tokenOptions.Issuer,
             ValidAudience = tokenOptions.Audience,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey)
+            IssuerSigningKey = SecurityKeyHelper.CreateSecurityKey(tokenOptions.SecurityKey),
+            ClockSkew = TimeSpan.Zero // Token süresi biter bitmez erişimi kesmek için
         };
     });
 
@@ -93,23 +101,33 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+//Swagger
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboard();
+//app.UseHangfireDashboard();
 
-using (var scope = app.Services.CreateScope())
-{
-    var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
+//if (!app.Environment.IsDevelopment())
+//{
+//    using (var scope = app.Services.CreateScope())
+//    {
+//        var jobService = scope.ServiceProvider.GetRequiredService<IJobService>();
 
-    // Önce eski istemediğin jobları temizler
-    jobService.RemoveJobs();
+//        // Önce eski istemediğin jobları temizler
+//        jobService.RemoveJobs();
 
-    // Sonra güncel jobları kaydeder/günceller
-    jobService.Jobs();
-}
+//        // Sonra güncel jobları kaydeder/günceller
+//        jobService.Jobs();
+//    }
+//}
 
 app.MapControllers();
 
