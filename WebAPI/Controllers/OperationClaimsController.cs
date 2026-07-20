@@ -22,6 +22,10 @@ namespace WebAPI.Controllers
         public IActionResult GetAll()
         {
             var result = _operationClaimService.GetAll();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 
@@ -31,11 +35,11 @@ namespace WebAPI.Controllers
         public IActionResult GetById(int id)
         {
             var result = _operationClaimService.GetById(id);
-            if (result != null)
+            if (!result.Success)
             {
-                return Ok(result);
+                return BadRequest(result);
             }
-            return BadRequest("Rol bulunamadı veya silinmiş.");
+            return Ok(result);
         }
 
         // 3. YENİ ROL EKLE
@@ -43,8 +47,12 @@ namespace WebAPI.Controllers
         [HttpPost("add")]
         public IActionResult Add(OperationClaim operationClaim)
         {
-            _operationClaimService.Add(operationClaim);
-            return Ok("Rol başarıyla eklendi.");
+            var result = _operationClaimService.Add(operationClaim);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
         // 4. ROL BİLGİSİNİ GÜNCELLE
@@ -52,16 +60,12 @@ namespace WebAPI.Controllers
         [HttpPut("update")]
         public IActionResult Update(OperationClaim operationClaim)
         {
-            var existingClaim = _operationClaimService.GetById(operationClaim.Id);
-            if (existingClaim == null)
+            var result = _operationClaimService.Update(operationClaim);
+            if (!result.Success)
             {
-                return BadRequest("Güncellenmek istenen rol bulunamadı.");
+                return BadRequest(result);
             }
-
-            existingClaim.Name = operationClaim.Name;
-
-            _operationClaimService.Update(existingClaim);
-            return Ok("Rol başarıyla güncellendi.");
+            return Ok(result);
         }
 
         // 5. ROL SİL (Soft-Delete)
@@ -69,14 +73,12 @@ namespace WebAPI.Controllers
         [HttpDelete("delete")]
         public IActionResult Delete(int id)
         {
-            var claimToDelete = _operationClaimService.GetById(id);
-            if (claimToDelete == null)
+            var result = _operationClaimService.Delete(id);
+            if (!result.Success)
             {
-                return BadRequest("Silinmek istenen rol bulunamadı.");
+                return BadRequest(result);
             }
-
-            _operationClaimService.Delete(claimToDelete);
-            return Ok("Rol başarıyla silindi (IsDeleted=true yapıldı).");
+            return Ok(result);
         }
     }
 }

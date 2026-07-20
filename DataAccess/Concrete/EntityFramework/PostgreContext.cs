@@ -22,8 +22,9 @@ namespace DataAccess.Concrete.EntityFramework
             if (!optionsBuilder.IsConfigured)
             {
                 // Sabit bağlantı adresi (Fallback)
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=EpdkByCountries;Username=postgres;Password=4321;");
+                //optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=EpdkByCountries;Username=postgres;Password=4321;");
                 //optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=EpdkByCountries;Username=postgres;Password=2021;");
+                optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=EpdkByCountries;Username=postgres;Password=2023;");
             }
         }
 
@@ -120,6 +121,7 @@ namespace DataAccess.Concrete.EntityFramework
             {
                 entity.HasKey(oc => oc.Id);
                 entity.Property(oc => oc.Name).IsRequired().HasMaxLength(100);
+                entity.HasIndex(oc => oc.Name).IsUnique();
             });
 
             // 3. USER OPERATION CLAIM (ARA TABLO) YAPILANDIRMASI

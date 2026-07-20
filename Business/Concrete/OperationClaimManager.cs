@@ -1,6 +1,8 @@
 ﻿using Business.Abstract;
 using Core.Entities.Concrete;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
+using DataAccess.Concrete.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,29 +18,86 @@ namespace Business.Concrete
             _operationClaimDal = operationClaimDal;
         }
 
-        public void Add(OperationClaim operationClaim)
+        public IResult Add(OperationClaim operationClaim)
         {
+            if (string.IsNullOrWhiteSpace(operationClaim.Name))
+            {
+                return new ErrorResult("Rol adı boş olamaz.");
+            }
+
+            var existingOperationClaim = _operationClaimDal.Get(oc => oc.Name.ToLower() == operationClaim.Name.ToLower() && oc.IsDeleted == false);
+
+            if (existingOperationClaim != null)
+            {
+                return new ErrorResult("Operation claim zaten bulunuyor.");
+            }
+
             _operationClaimDal.Add(operationClaim);
+
+            return new SuccessResult("Operation claim başarıyla eklendi.");
         }
 
-        public void Update(OperationClaim operationClaim)
+        public IResult Delete(int id)
         {
-            _operationClaimDal.Update(operationClaim);
+            var result = GetById(id);
+
+            if (!result.Success)
+            {
+                return new ErrorResult(result.Message);
+            }
+            _operationClaimDal.Delete(result.Data);
+            return new SuccessResult("Operation claim başarıyla silindi.");
         }
 
-        public void Delete(OperationClaim operationClaim)
+        public IDataResult<List<OperationClaim>> GetAll()
         {
-            _operationClaimDal.Delete(operationClaim);
+            var operationClaims = _operationClaimDal.GetAll(c => c.IsDeleted == false);
+
+            return new SuccessDataResult<List<OperationClaim>>(operationClaims);
         }
 
-        public OperationClaim GetById(int id)
+        public IDataResult<OperationClaim> GetById(int id)
         {
-            return _operationClaimDal.Get(oc => oc.Id == id && oc.IsDeleted == false);
+            var operationClaim = _operationClaimDal.Get(c => c.Id == id && c.IsDeleted == false);
+
+            if (operationClaim == null)
+            {
+                return new ErrorDataResult<OperationClaim>("Operation claim bulunamadı.");
+            }
+
+            return new SuccessDataResult<OperationClaim>(operationClaim);
         }
 
-        public List<OperationClaim> GetAll()
+        public IResult Update(OperationClaim operationClaim)
         {
-            return _operationClaimDal.GetAll(oc => oc.IsDeleted == false);
+            if (string.IsNullOrWhiteSpace(operationClaim.Name))
+            {
+                return new ErrorResult("Operation claim adı boş olamaz.");
+            }
+
+            var existingOperationClaim = _operationClaimDal.Get(oc => oc.Id == operationClaim.Id && !oc.IsDeleted);
+
+            if (existingOperationClaim == null)
+            {
+                return new ErrorResult("Güncellenecek Operation claim bulunamadı.");
+            }
+
+            if(existingOperationClaim.Name.ToLower() != operationClaim.Name.ToLower())
+            {
+                var isNameTaken = _operationClaimDal.
+                    Get(oc => oc.Name.ToLower() == operationClaim.Name.ToLower() && oc.Id != operationClaim.Id && !oc.IsDeleted);
+                
+                if (isNameTaken != null)
+                {
+                    return new ErrorResult("Bu isimde başka bir Operation claim zaten mevcut.");
+                }
+            }
+
+            existingOperationClaim.Name = operationClaim.Name;
+            _operationClaimDal.Update(existingOperationClaim);
+
+            return new SuccessResult("Rol başarıyla güncellendi.");
+
         }
     }
 }

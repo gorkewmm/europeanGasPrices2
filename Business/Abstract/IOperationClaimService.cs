@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Concrete;
+using Core.Utilities.Results;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,10 +8,10 @@ namespace Business.Abstract
 {
     public interface IOperationClaimService
     {
-        void Add(OperationClaim operationClaim);
-        void Update(OperationClaim operationClaim);
-        void Delete(OperationClaim operationClaim);
-        OperationClaim GetById(int id);
-        List<OperationClaim> GetAll();
+        IResult Add(OperationClaim operationClaim);
+        IResult Update(OperationClaim operationClaim);
+        IResult Delete(int id);
+        IDataResult<OperationClaim> GetById(int id);
+        IDataResult<List<OperationClaim>> GetAll();
     }
 }
