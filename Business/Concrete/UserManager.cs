@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
@@ -77,11 +78,38 @@ namespace Business.Concrete
 
         public IResult Update(UserForUpdateDto userForUpdateDto)
         {
+            // 1. FluentValidation Doğrulaması
+            var validator = new UserUpdateDtoValidator();
+            var validationResult = validator.Validate(userForUpdateDto);
+            if (!validationResult.IsValid)
+            {
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
+            }
+
+            // 2. İş Kuralları
             var user = _userDal.Get(u => u.Id == userForUpdateDto.Id && !u.IsDeleted);
 
             if (user == null)
             {
                 return new ErrorResult("Güncellenecek kullanıcı bulunamadı.");
+            }
+
+            // E - posta çakışma kontrolü(Başka kullanıcı bu e-postayı kullanıyor mu?)
+            var isEmailTaken = _userDal.Get(u => u.Id != userForUpdateDto.Id &&
+                                                 u.Email.ToLower() == userForUpdateDto.Email.ToLower() &&
+                                                 !u.IsDeleted);
+            if (isEmailTaken != null)
+            {
+                return new ErrorResult("Bu e-posta adresi zaten kullanılıyor.");
+            }
+
+            // NickName çakışma kontrolü (Kullanıcının kendi NickName'i hariç başkası almış mı?)
+            var isNickNameTaken = _userDal.Get(u => u.Id != userForUpdateDto.Id &&
+                                                    u.NickName == userForUpdateDto.NickName &&
+                                                    !u.IsDeleted);
+            if (isNickNameTaken != null)
+            {
+                return new ErrorResult("Bu kullanıcı adı (NickName) zaten başka bir kullanıcı tarafından kullanılıyor.");
             }
 
             user.FirstName = userForUpdateDto.FirstName;
@@ -94,6 +122,15 @@ namespace Business.Concrete
         }
         public IResult ChangePassword(UserForChangePasswordDto dto)
         {
+            // 1. FluentValidation Doğrulaması
+            var validator = new UserChangePasswordDtoValidator();
+            var validationResult = validator.Validate(dto);
+            if (!validationResult.IsValid)
+            {
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
+            }
+
+            // 2. İş Kuralları
             var user = _userDal.Get(u => u.Id == dto.Id && !u.IsDeleted);
             if (user == null)
                 return new ErrorResult("Kullanıcı bulunamadı.");
