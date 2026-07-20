@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -20,6 +21,15 @@ namespace Business.Concrete
 
         public IResult Add(Permission permission)
         {
+            // 1. FluentValidation Doğrulaması
+            var validator = new PermissionValidator();
+            var validationResult = validator.Validate(permission);
+            if (!validationResult.IsValid)
+            {
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
+            }
+
+            // 2. Business Rules
             if (permission == null || string.IsNullOrWhiteSpace(permission.Name))
             {
                 return new ErrorResult("Geçersiz yetki verisi veya yetki adı boş olamaz.");
@@ -70,11 +80,15 @@ namespace Business.Concrete
 
         public IResult Update(Permission permission)
         {
-            if(permission == null || string.IsNullOrWhiteSpace(permission.Name))
+            // 1. FluentValidation Doğrulaması
+            var validator = new PermissionValidator();
+            var validationResult = validator.Validate(permission);
+            if (!validationResult.IsValid)
             {
-                return new ErrorResult("Geçersiz yetki verisi veya yetki adı boş olamaz.");
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
             }
 
+            // 2. Business Rules
             var existingPermission = _permissionDal.Get(p => p.Id == permission.Id && !p.IsDeleted);
             if (existingPermission == null)
             {

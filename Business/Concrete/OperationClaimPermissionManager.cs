@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -20,10 +21,15 @@ namespace Business.Concrete
 
         public IResult Add(OperationClaimPermission operationClaimPermission)
         {
-            if (operationClaimPermission == null)
+            // 1. FluentValidation Doğrulaması
+            var validator = new OperationClaimPermissionValidator();
+            var validationResult = validator.Validate(operationClaimPermission);
+            if (!validationResult.IsValid)
             {
-                return new ErrorResult("Geçersiz rol-yetki verisi.");
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
             }
+
+            // 2. İş Kuralları
 
             var exists = _operationClaimPermissionDal.Get(ocp => ocp.OperationClaimId == operationClaimPermission.OperationClaimId
             && ocp.PermissionId == operationClaimPermission.PermissionId && !ocp.IsDeleted);
@@ -82,10 +88,15 @@ namespace Business.Concrete
 
         public IResult Update(OperationClaimPermission operationClaimPermission)
         {
-            if (operationClaimPermission == null)
+            // 1. FluentValidation Doğrulaması
+            var validator = new OperationClaimPermissionValidator();
+            var validationResult = validator.Validate(operationClaimPermission);
+            if (!validationResult.IsValid)
             {
-                return new ErrorResult("Geçersiz rol-yetki verisi.");
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
             }
+
+            // 2. İş Kuralları
 
             var existingPermission = _operationClaimPermissionDal.Get(ocp => ocp.Id == operationClaimPermission.Id && !ocp.IsDeleted);
             if (existingPermission == null)

@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
@@ -20,12 +21,17 @@ namespace Business.Concrete
 
         public IResult Add(OperationClaim operationClaim)
         {
-            if (operationClaim == null || string.IsNullOrWhiteSpace(operationClaim.Name))
+            // 1. FluentValidation Doğrulaması
+            var validator = new OperationClaimValidator();
+            var validationResult = validator.Validate(operationClaim);
+            if (!validationResult.IsValid)
             {
-                return new ErrorResult("Rol adı boş olamaz.");
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
             }
 
-            var existingOperationClaim = _operationClaimDal.Get(oc => oc.Name.ToLower() == operationClaim.Name.ToLower() && oc.IsDeleted == false);
+            var existingOperationClaim = _operationClaimDal.Get(oc => 
+            oc.Name.ToLower() == operationClaim.Name.ToLower() && 
+            oc.IsDeleted == false);
 
             if (existingOperationClaim != null)
             {
@@ -76,9 +82,11 @@ namespace Business.Concrete
 
         public IResult Update(OperationClaim operationClaim)
         {
-            if (operationClaim == null || string.IsNullOrWhiteSpace(operationClaim.Name))
+            var validator = new OperationClaimValidator();
+            var validationResult = validator.Validate(operationClaim);
+            if (!validationResult.IsValid)
             {
-                return new ErrorResult("Operation claim adı boş olamaz.");
+                return new ErrorResult(validationResult.Errors[0].ErrorMessage);
             }
 
             var existingOperationClaim = _operationClaimDal.Get(oc => oc.Id == operationClaim.Id && !oc.IsDeleted);
