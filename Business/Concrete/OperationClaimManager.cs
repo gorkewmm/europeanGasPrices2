@@ -20,7 +20,7 @@ namespace Business.Concrete
 
         public IResult Add(OperationClaim operationClaim)
         {
-            if (string.IsNullOrWhiteSpace(operationClaim.Name))
+            if (operationClaim == null || string.IsNullOrWhiteSpace(operationClaim.Name))
             {
                 return new ErrorResult("Rol adı boş olamaz.");
             }
@@ -51,9 +51,15 @@ namespace Business.Concrete
 
         public IDataResult<List<OperationClaim>> GetAll()
         {
-            var operationClaims = _operationClaimDal.GetAll(c => c.IsDeleted == false);
+            var result = _operationClaimDal.GetAll(c => c.IsDeleted == false);
 
-            return new SuccessDataResult<List<OperationClaim>>(operationClaims);
+            if (result == null || result.Count == 0)
+            {
+                return new ErrorDataResult<List<OperationClaim>>("Sistemde listelenecek operation claim kaydı bulunamadı.");
+            }
+
+
+            return new SuccessDataResult<List<OperationClaim>>(result);
         }
 
         public IDataResult<OperationClaim> GetById(int id)
@@ -70,7 +76,7 @@ namespace Business.Concrete
 
         public IResult Update(OperationClaim operationClaim)
         {
-            if (string.IsNullOrWhiteSpace(operationClaim.Name))
+            if (operationClaim == null || string.IsNullOrWhiteSpace(operationClaim.Name))
             {
                 return new ErrorResult("Operation claim adı boş olamaz.");
             }

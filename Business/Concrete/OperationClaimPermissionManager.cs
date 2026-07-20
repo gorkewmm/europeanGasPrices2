@@ -13,6 +13,11 @@ namespace Business.Concrete
     {
         private readonly IOperationClaimPermissionDal _operationClaimPermissionDal;
 
+        public OperationClaimPermissionManager(IOperationClaimPermissionDal operationClaimPermissionDal)
+        {
+            _operationClaimPermissionDal = operationClaimPermissionDal;
+        }
+
         public IResult Add(OperationClaimPermission operationClaimPermission)
         {
             if (operationClaimPermission == null)
@@ -47,9 +52,14 @@ namespace Business.Concrete
 
         public IDataResult<List<OperationClaimPermission>> GetAll()
         {
-            var operationClaimPermissions = _operationClaimPermissionDal.GetAll(c => c.IsDeleted == false);
+            var result = _operationClaimPermissionDal.GetAll(c => c.IsDeleted == false);
 
-            return new SuccessDataResult<List<OperationClaimPermission>>(operationClaimPermissions);
+            if (result == null || result.Count == 0)
+            {
+                return new ErrorDataResult<List<OperationClaimPermission>>("Sistemde listelenecek rol-yetki kaydı bulunamadı.");
+            }
+
+            return new SuccessDataResult<List<OperationClaimPermission>>(result);
         }
 
         public IDataResult<OperationClaimPermission> GetById(int id)
@@ -64,11 +74,9 @@ namespace Business.Concrete
 
         public IDataResult<List<OperationClaimPermission>> GetByOperationClaimId(int operationClaimId)
         {
-            var result = _operationClaimPermissionDal.GetAll(ocp => ocp.OperationClaimId == operationClaimId && !ocp.IsDeleted);
-            if (result == null || result.Count == 0)
-            {
-                return new ErrorDataResult<List<OperationClaimPermission>>("Bu rol için herhangi bir yetki bulunamadı.");
-            }
+            var result = _operationClaimPermissionDal.GetAll(ocp => ocp.OperationClaimId == operationClaimId && !ocp.IsDeleted)
+                            ?? new List<OperationClaimPermission>();
+
             return new SuccessDataResult<List<OperationClaimPermission>>(result);
         }
 
@@ -96,7 +104,11 @@ namespace Business.Concrete
                 return new ErrorResult("Bu rol-yetki ilişkisi zaten mevcut.");
             }
 
-            _operationClaimPermissionDal.Update(operationClaimPermission);
+            // Veritabanındaki nesneyi güvenli şekilde güncelleme
+            existingPermission.OperationClaimId = operationClaimPermission.OperationClaimId;
+            existingPermission.PermissionId = operationClaimPermission.PermissionId;
+
+            _operationClaimPermissionDal.Update(existingPermission);
             return new SuccessResult("Rol-yetki ilişkisi başarıyla güncellendi.");
         }
     }

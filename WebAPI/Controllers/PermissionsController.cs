@@ -16,69 +16,64 @@ namespace WebAPI.Controllers
             _permissionService = permissionService;
         }
 
-        // 1. TÜM YETKİLERİ LİSTELE
         // GET api/permissions/getall
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
             var result = _permissionService.GetAll();
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
             return Ok(result);
         }
 
-        // 2. ID İLE YETKİ DETAYINI GETİR
         // GET api/permissions/getbyid?id=1
         [HttpGet("getbyid")]
         public IActionResult GetById(int id)
         {
             var result = _permissionService.GetById(id);
-            if (result != null)
+            if (!result.Success)
             {
-                return Ok(result);
+                return BadRequest(result);
             }
-            return BadRequest("Yetki bulunamadı veya silinmiş.");
+            return Ok(result);
         }
 
-        // 3. YENİ YETKİ EKLE
         // POST api/permissions/add
         [HttpPost("add")]
         public IActionResult Add(Permission permission)
         {
-            _permissionService.Add(permission);
-            return Ok("Yetki başarıyla eklendi.");
+            var result = _permissionService.Add(permission);
+            if (!result.Success)
+            {
+                return BadRequest(result);
+            }
+            return Ok(result);
         }
 
-        // 4. YETKİ BİLGİLERİNİ GÜNCELLE
         // PUT api/permissions/update
         [HttpPut("update")]
         public IActionResult Update(Permission permission)
         {
-            var existingPermission = _permissionService.GetById(permission.Id);
-            if (existingPermission == null)
+            var result = _permissionService.Update(permission);
+            if (!result.Success)
             {
-                return BadRequest("Güncellenmek istenen yetki bulunamadı.");
+                return BadRequest(result);
             }
-
-            // Name ve Description alanlarını güncelliyoruz
-            existingPermission.Name = permission.Name;
-            existingPermission.Description = permission.Description;
-
-            _permissionService.Update(existingPermission);
-            return Ok("Yetki başarıyla güncellendi.");
+            return Ok(result);
         }
 
-        // 5. YETKİ SİL (Soft-Delete)
         // DELETE api/permissions/delete?id=1
         [HttpDelete("delete")]
         public IActionResult Delete(int id)
         {
-            var permissionToDelete = _permissionService.GetById(id);
-            if (permissionToDelete == null)
+            var result = _permissionService.Delete(id);
+            if (!result.Success)
             {
-                return BadRequest("Silinmek istenen yetki bulunamadı.");
+                return BadRequest(result);
             }
-
-            _permissionService.Delete(permissionToDelete);
-            return Ok("Yetki başarıyla silindi (IsDeleted=true yapıldı).");
+            return Ok(result);
         }
     }
 }
