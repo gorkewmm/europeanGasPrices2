@@ -112,7 +112,7 @@ namespace Business.Concrete
 
         public IDataResult<string> GetCheapestFuelType(string country)
         {
-            var fuel = _fuelPriceDal.Get(x => x.Country == country);
+            var fuel = _fuelPriceDal.GetAll(x => x.Country == country).OrderByDescending(x => x.PriceDate).FirstOrDefault();
             if (fuel == null)
             {
                 return new ErrorDataResult<string>("Ülke bulunamadı");
