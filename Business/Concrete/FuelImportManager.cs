@@ -4,7 +4,7 @@ using Entities.DTOs;
 using System.Text.Json;
 using WebAPI.Service.Abstract;
 
-namespace WebAPI.Service.Concrete
+namespace Business.Concrete
 {
     public class FuelImportManager : IFuelImportService
     {
