@@ -13,7 +13,7 @@ namespace Business.ValidationRules.FluentValidation
             RuleFor(p => p).NotNull().WithMessage("Permission nesnesi boş olamaz.");
 
             // 2. Name alanı boş olamaz, en az 2, en fazla 100 karakter olabilir (DbContext ile uyumlu)
-            RuleFor(p=> p.Name).NotNull()
+            RuleFor(p=> p.Name)
                 .NotEmpty().WithMessage("Permission adı boş olamaz.")
                 .MinimumLength(2).WithMessage("Yetki adı en az 2 karakter olmalıdır.")
                 .MaximumLength(100).WithMessage("Yetki adı 100 karakterden uzun olamaz.");

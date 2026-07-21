@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Business.ValidationRules.FluentValidation;
 using Core.Entities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
@@ -23,6 +24,17 @@ namespace Business.Concrete
 
         public IDataResult<User> Register(UserForRegisterDto userForRegisterDto, string password)
         {
+
+            // 1. Validasyonu Manuel Çalıştır
+            var validator = new UserForRegisterDtoValidator();
+            var result = validator.Validate(userForRegisterDto);
+
+            if (!result.IsValid)
+            {
+                // İlk bulduğu hatayı döner
+                return new ErrorDataResult<User>(result.Errors[0].ErrorMessage);
+            }
+
             // 1. E-posta kontrolü
             var userExists = UserExists(userForRegisterDto.Email);
             if (!userExists.Success)
@@ -53,6 +65,15 @@ namespace Business.Concrete
         }
         public IDataResult<User> Login(UserForLoginDto userForLoginDto)
         {
+            // 1. Validasyonu Manuel Çalıştır
+            var validator = new UserForLoginDtoValidator();
+            var result = validator.Validate(userForLoginDto);
+
+            if (!result.IsValid)
+            {
+                return new ErrorDataResult<User>(result.Errors[0].ErrorMessage);
+            }
+
             var dataResult = _userService.GetByMail(userForLoginDto.Email);
             if (!dataResult.Success)
             {
