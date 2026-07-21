@@ -61,22 +61,19 @@ namespace Business.Concrete
         }
         public IDataResult<decimal> GetAverageDieselPrice()
         {
-            var result = _fuelPriceDal.GetAll().Average(x => x.Diesel);
-
+            var result = _fuelPriceDal.GetAverage(x => x.Diesel);
             return new SuccessDataResult<decimal>(result);
         }
 
         public IDataResult<decimal> GetAverageGasolinePrice()
         {
-            var result = _fuelPriceDal.GetAll().Average(x => x.Gasoline);
-
+            var result = _fuelPriceDal.GetAverage(x => x.Gasoline);
             return new SuccessDataResult<decimal>(result);
         }
 
         public IDataResult<decimal> GetAverageLpgPrice()
         {
-            var result = _fuelPriceDal.GetAll().Average(x => x.Lpg);
-
+            var result = _fuelPriceDal.GetAverage(x => x.Lpg);
             return new SuccessDataResult<decimal>(result);
         }
 
@@ -84,7 +81,7 @@ namespace Business.Concrete
         {
             var result = _fuelPriceDal.GetAll(x => x.Country == country);
 
-            if (result == null)
+            if (result.Count == 0)
             {
                 return new ErrorDataResult<List<FuelPrice>>("Ülke bulunamadı");
             }
@@ -95,6 +92,10 @@ namespace Business.Concrete
         {
             var result = _fuelPriceDal.GetAll(x => x.Currency == currency);
 
+            if (result.Count == 0)
+            {
+                return new ErrorDataResult<List<FuelPrice>>("Para birimi bulunamadı");
+            }
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
@@ -139,36 +140,36 @@ namespace Business.Concrete
 
         public IDataResult<List<FuelPrice>> GetCheapestGasolineCountries(int count)
         {
-            var result = _fuelPriceDal.GetAll().OrderBy(x => x.Gasoline).Take(count).ToList();
+            var result = _fuelPriceDal.GetTopByAscending(x => x.Gasoline, count);
 
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
-        
+
 
         public IDataResult<List<FuelPrice>> GetMostExpensiveGasolineCountries(int count)
         {
-            var result = _fuelPriceDal.GetAll().OrderByDescending(x => x.Gasoline).Take(count).ToList();
+            var result = _fuelPriceDal.GetTopByDescending(x => x.Gasoline, count);
 
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
         public IDataResult<List<FuelPrice>> GetCheapestDieselCountries(int count)
         {
-            var result = _fuelPriceDal.GetAll().OrderBy(x => x.Diesel).Take(count).ToList();
+            var result = _fuelPriceDal.GetTopByAscending(x=> x.Diesel, count);
 
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
         public IDataResult<List<FuelPrice>> GetMostExpensiveDieselCountries(int count)
         {
-            var result = _fuelPriceDal.GetAll().OrderByDescending(x => x.Diesel).Take(count).ToList();
+            var result = _fuelPriceDal.GetTopByDescending(x => x.Diesel, count);
 
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
 
         public IDataResult<List<FuelPrice>> GetCheapestLpgountries(int count)
         {
-            var result = _fuelPriceDal.GetAll().OrderBy(x => x.Lpg).Take(count).ToList();
+            var result = _fuelPriceDal.GetTopByAscending(x => x.Lpg, count);
 
             return new SuccessDataResult<List<FuelPrice>>(result);
         }
@@ -201,14 +202,14 @@ namespace Business.Concrete
 
 
                 // Yeni kayıt
-                
-                    var entity = FuelPriceMapper.ToEntity(dto);
-               
-                    //entity.CreatedDate = DateTime.Now;
-                    //entity.UpdatedDate = DateTime.Now;
 
-                    _fuelPriceDal.Add(entity);
-                
+                var entity = FuelPriceMapper.ToEntity(dto);
+
+                //entity.CreatedDate = DateTime.Now;
+                //entity.UpdatedDate = DateTime.Now;
+
+                _fuelPriceDal.Add(entity);
+
 
 
                 // Mevcut kayıt güncelle
