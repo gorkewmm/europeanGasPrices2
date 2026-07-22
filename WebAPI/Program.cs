@@ -1,5 +1,7 @@
 using Business.Abstract;
+using Business.Abstract.Epdk;
 using Business.Concrete;
+using Business.Concrete.Epdk;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
@@ -41,6 +43,8 @@ builder.Services.AddScoped<IUserOperationClaimService, UserOperationClaimManager
 
 builder.Services.AddScoped<IOperationClaimPermissionDal, EfOperationClaimPermissionDal>();
 builder.Services.AddScoped<IOperationClaimPermissionService, OperationClaimPermissionManager>();
+
+builder.Services.AddScoped<IEpdkBultenImportService, EpdkBultenImportManager>();
 
 
 //Swagger

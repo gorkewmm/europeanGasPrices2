@@ -8,7 +8,7 @@ namespace Business.Abstract.Epdk
 {
     public interface IEpdkBultenImportService
     {
-        Task<EpdkBultenResponseDto> GetBultenFromApiAsync(DateTime? raporTarihi);
+        Task<EpdkBultenResponseDto> GetBultenFromApiAsync(DateTime raporTarihi);
         
         Task<IResult> ImportAndSaveTurkeyFuelPricesAsync(DateTime raporTarihi);
     }

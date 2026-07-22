@@ -22,27 +22,36 @@ namespace Business.Concrete.Epdk
             _fuelPriceService = fuelPriceService;
         }
 
-        public async Task<EpdkBultenResponseDto> GetBultenFromApiAsync(DateTime? raporTarihi)
+        public async Task<EpdkBultenResponseDto> GetBultenFromApiAsync(DateTime raporTarihi)
         {
-            var targetDate = raporTarihi ?? DateTime.Now;
+            DateTime targetDate = (raporTarihi == default) ? DateTime.Now : raporTarihi;
 
-            var requstBody = new
+            // 1. EPDK'nın istediği format: dd.MM.yyyy (Örn: 02.02.2026)
+            string formattedDate = targetDate.ToString("dd.MM.yyyy");
+
+            // 2. GET isteğinde gövde (body) kabul eden EPDK için json hazırlığı
+            var requestBody = new
             {
-                raporTarihi = targetDate.ToString("yyyy-MM-dd")
+                raporTarihi = formattedDate
             };
 
-            var jsonContent = JsonSerializer.Serialize(requstBody);
+            var jsonContent = JsonSerializer.Serialize(requestBody);
 
 
-            var request = new HttpRequestMessage(HttpMethod.Get, baseUrl);
+            var request = new HttpRequestMessage(HttpMethod.Get, baseUrl)
+            {
+                Content = new StringContent(jsonContent, Encoding.UTF8, "application/json"),
+                // EPDK gibi eski/özel gateway'lerin GET+Body kabul etmesi için HTTP 1.1 zorunlu kılınır
+                Version = System.Net.HttpVersion.Version11
+            };
 
-            request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
 
             var response = await _httpClient.SendAsync(request);
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception($"EPDK API hata döndürdü! Durum Kodu: {response.StatusCode} - Nedeni: {response.ReasonPhrase}");
+                var errorDetails = await response.Content.ReadAsStringAsync();
+                throw new Exception($"EPDK API Hata Dönüştü! Kod: {response.StatusCode} - Detay: {errorDetails}");
             }
 
             var jsonString = await response.Content.ReadAsStringAsync();
@@ -66,7 +75,7 @@ namespace Business.Concrete.Epdk
 
             }
 
-            var fuelPrice = EpdkBultenMapper.ToTurkeyFuelPriceEntity(result);
+            var fuelPrice = EpdkBultenMapper.ToTurkeyFuelPriceEntity(result,raporTarihi);
 
             if (fuelPrice == null)
             {

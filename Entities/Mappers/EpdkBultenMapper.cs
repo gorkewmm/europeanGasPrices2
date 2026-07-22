@@ -8,7 +8,7 @@ namespace Entities.Mappers
 {
     public static class EpdkBultenMapper
     {
-        public static FuelPrice ToTurkeyFuelPriceEntity(EpdkBultenResponseDto dto)
+        public static FuelPrice ToTurkeyFuelPriceEntity(EpdkBultenResponseDto dto, DateTime raporTarihi)
         {
             if (dto?.Data == null || dto.Data.Count == 0)
             {
@@ -30,7 +30,7 @@ namespace Entities.Mappers
                 Gasoline = benzinItem != null ? benzinItem.Fiyat : 0,
                 Diesel = motorinItem != null ? motorinItem.Fiyat : 0,
                 Lpg = 0, 
-                PriceDate = DateTime.Now
+                PriceDate = raporTarihi
             };
 
         }
