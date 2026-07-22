@@ -33,6 +33,19 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
+
+        //Pagination için endpoint
+        [HttpGet("getpaged")]
+        public IActionResult GetPaged([FromQuery] PageRequestDto pageRequest)
+        {
+            var result = _fuelPriceService.GetPaged(pageRequest);
+            if (result.Success)
+            {
+                return Ok(result);
+            }
+            return BadRequest(result);
+        }
+
         [HttpGet("getbyid")]
         [SecuredOperation("fuelprice.create")]
         public IActionResult GetById(int id)

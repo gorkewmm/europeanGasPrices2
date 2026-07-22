@@ -241,6 +241,12 @@ namespace Business.Concrete
             return new SuccessResult("Yakıt fiyatı eklendi.");
         }
 
+        public IDataResult<PagedResultDto<FuelPrice>> GetPaged(PageRequestDto pageRequest)
+        {
+            var result = _fuelPriceDal.GetPaged(pageRequest);
+            return new SuccessDataResult<PagedResultDto<FuelPrice>>(result);
+        }
+
         //public IResult AddFromApi(List<FuelPriceDto> fuelPriceDtos)
         //{
         //    if (fuelPriceDtos == null || fuelPriceDtos.Count == 0)

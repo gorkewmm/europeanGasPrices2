@@ -1,6 +1,7 @@
 ﻿using Core.DataAccess.EntityFramework;
 using DataAccess.Abstract;
 using Entities.Concrete;
+using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -33,5 +34,32 @@ namespace DataAccess.Concrete.EntityFramework
                 return ctx.Set<FuelPrice>().OrderByDescending(keySelector).Take(topCount).ToList();
             }
         }
+
+
+        // Pagination
+        public PagedResultDto<FuelPrice> GetPaged(PageRequestDto pageRequest)
+        {
+            using (PostgreContext ctx = new PostgreContext())
+            {
+                //silinmeyen verileri al
+                var query = ctx.Set<FuelPrice>().Where(x => !x.IsDeleted);
+
+                var totalCount = query.Count();
+
+                var items = query.OrderByDescending(x => x.PriceDate)
+                    .Skip(pageRequest.PageIndex * pageRequest.PageSize)
+                    .Take(pageRequest.PageSize)
+                    .ToList();
+
+                return new PagedResultDto<FuelPrice>
+                {
+                    Items = items,
+                    PageIndex = pageRequest.PageIndex,
+                    PageSize = pageRequest.PageSize,
+                    TotalCount = totalCount
+                };
+            }
+        }
+
     }
 }

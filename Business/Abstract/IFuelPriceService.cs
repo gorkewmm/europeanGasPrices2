@@ -59,5 +59,10 @@ namespace Business.Abstract
 
         IResult AddFromApi(List<FuelPriceApiDto> fuelPriceDtos);
 
+
+
+        //Pagination
+        IDataResult<PagedResultDto<FuelPrice>> GetPaged(PageRequestDto pageRequest);
+
     }
 }
