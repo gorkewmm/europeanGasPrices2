@@ -2,12 +2,14 @@
 using Core.Utilities.Security.Security;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.Service.Abstract;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FuelPriceController : ControllerBase
@@ -116,8 +118,6 @@ namespace WebAPI.Controllers
             return BadRequest(result);
         }
 
-        // --- İstatistiki ve Ortalama Hesaplama Endpointleri ---
-
         [HttpGet("getaveragedieselprice")]
         public IActionResult GetAverageDieselPrice()
         {
@@ -176,6 +176,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("getmostexpensivegasolinecountries")]
+        [AllowAnonymous]
         public IActionResult GetMostExpensiveGasolineCountries(int count)
         {
             var result = _fuelPriceService.GetMostExpensiveGasolineCountries(count);
