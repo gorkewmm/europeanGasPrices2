@@ -18,7 +18,7 @@ namespace Entities.Mappers
                 PriceDate = DateTime.Now
             };
         }
-        public static FuelPrice ToEntity(FuelPriceCreateDto dto)
+        public static FuelPrice ToEntity(FuelPriceCreateDto dto) 
         {
             return new FuelPrice
             {

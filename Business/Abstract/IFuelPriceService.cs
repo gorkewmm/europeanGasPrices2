@@ -59,7 +59,7 @@ namespace Business.Abstract
 
         IResult AddFromApi(List<FuelPriceApiDto> fuelPriceDtos);
 
-
+        IResult Add(FuelPrice fuelPrice);
 
         //Pagination
         IDataResult<PagedResultDto<FuelPrice>> GetPaged(PageRequestDto pageRequest);
