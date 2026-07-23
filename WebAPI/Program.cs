@@ -1,9 +1,13 @@
 using Business.Abstract;
+using Business.Abstract.Epdk;
 using Business.Concrete;
+using Business.Concrete.Epdk;
 using Core.Utilities.Security.Encryption;
 using Core.Utilities.Security.JWT;
 using DataAccess.Abstract;
+using DataAccess.Abstract.Epdk;
 using DataAccess.Concrete.EntityFramework;
+using DataAccess.Concrete.EntityFramework.Epdk;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -41,6 +45,15 @@ builder.Services.AddScoped<IUserOperationClaimService, UserOperationClaimManager
 
 builder.Services.AddScoped<IOperationClaimPermissionDal, EfOperationClaimPermissionDal>();
 builder.Services.AddScoped<IOperationClaimPermissionService, OperationClaimPermissionManager>();
+
+
+                                        //EPDK
+// Data Access Kayıtları
+builder.Services.AddScoped<IEpdkFuelPriceDal, EfEpdkFuelPriceDal>();
+// Business Kayıtları
+builder.Services.AddScoped<IEpdkFuelPriceService, EpdkFuelPriceManager>();
+// Import Service Kaydı (HttpClient ile Typed Client olarak)
+builder.Services.AddHttpClient<IEpdkImportService, EpdkImportManager>();
 
 
 //Swagger

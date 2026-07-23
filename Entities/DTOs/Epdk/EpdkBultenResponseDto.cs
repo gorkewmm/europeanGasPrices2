@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace Entities.DTOs
+namespace Entities.DTOs.Epdk
 {
     public class EpdkBultenResponseDto
     {
@@ -37,26 +37,5 @@ namespace Entities.DTOs
 
         [JsonPropertyName("errors")]
         public List<string> Errors { get; set; }
-    }
-
-
-    public class EpdkBultenItemDto
-    {
-        [JsonPropertyName("Fiyat")]
-        public decimal Fiyat { get; set; }
-
-
-        [JsonPropertyName("Yakıt")]
-        public string Yakit { get; set; }
-
-
-        [JsonPropertyName("Tarih")]
-        public string Tarih { get; set; }
-
-
-        [JsonPropertyName("Ölçü Birimi")]
-        public string OlcuBirimi { get; set; }
-
-
     }
 }

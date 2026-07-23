@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Concrete;
 using Entities.Concrete;
+using Entities.Concrete.Epdk;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace DataAccess.Concrete.EntityFramework
         public DbSet<UserOperationClaim> UserOperationClaims { set; get; }
         public DbSet<Permission> Permissions { set; get; }
         public DbSet<OperationClaimPermission> OperationClaimPermissions { set; get; }
+        public DbSet<EpdkFuelPrice> EpdkFuelPrices { set; get; }
 
         public override int SaveChanges()
         {
@@ -174,6 +176,29 @@ namespace DataAccess.Concrete.EntityFramework
 
                 entity.HasIndex(ocp => new { ocp.OperationClaimId, ocp.PermissionId }).IsUnique()
                 .HasFilter("\"IsDeleted\" = false");
+            });
+
+
+
+
+            //Epdk için ayrı bir tablo oluştur.
+            modelBuilder.Entity<EpdkFuelPrice>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.Property(e => e.Fiyat).IsRequired().
+                HasColumnType("numeric(15,5)").IsRequired();
+
+                entity.Property(e => e.Yakit).IsRequired().HasMaxLength(150);
+
+                entity.Property(e => e.Tarih).IsRequired().HasMaxLength(50);
+
+                entity.Property(e => e.OlcuBirimi).IsRequired().HasMaxLength(50);
+
+                entity.Property(x => x.PriceDate).IsRequired();
+
+                entity.HasIndex(e => new { e.Yakit, e.PriceDate }).IsUnique().
+                HasFilter("\"IsDeleted\" = false");
             });
         }
     }
