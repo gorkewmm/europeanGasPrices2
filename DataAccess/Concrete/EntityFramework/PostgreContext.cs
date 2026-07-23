@@ -139,7 +139,8 @@ namespace DataAccess.Concrete.EntityFramework
                       .HasForeignKey(uoc => uoc.OperationClaimId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasIndex(uoc => new { uoc.UserId, uoc.OperationClaimId }).IsUnique();
+                entity.HasIndex(uoc => new { uoc.UserId, uoc.OperationClaimId }).IsUnique().
+                HasFilter("\"IsDeleted\" = false");
             });
 
             // 4. PERMISSION (YETKİ) YAPILANDIRMASI
@@ -171,7 +172,8 @@ namespace DataAccess.Concrete.EntityFramework
                       .HasForeignKey(ocp => ocp.PermissionId)
                       .OnDelete(DeleteBehavior.Cascade);
 
-                entity.HasIndex(ocp => new { ocp.OperationClaimId, ocp.PermissionId }).IsUnique();
+                entity.HasIndex(ocp => new { ocp.OperationClaimId, ocp.PermissionId }).IsUnique()
+                .HasFilter("\"IsDeleted\" = false");
             });
         }
     }
