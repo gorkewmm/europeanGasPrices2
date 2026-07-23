@@ -232,16 +232,16 @@ namespace Business.Concrete
             return new SuccessResult("API verileri başarıyla aktarıldı.");
         }
 
-        public IResult Add(FuelPrice fuelPrice)
-        {
-            if (fuelPrice == null)
-            {
-                return new ErrorResult("Eklenecek yakıt fiyatı verisi boş olamaz.");
-            }
+        //public IResult Add(FuelPrice fuelPrice)
+        //{
+        //    if (fuelPrice == null)
+        //    {
+        //        return new ErrorResult("Eklenecek yakıt fiyatı verisi boş olamaz.");
+        //    }
 
-            _fuelPriceDal.Add(fuelPrice);
-            return new SuccessResult("Yakıt fiyatı başarıyla eklendi.");
-        }
+        //    _fuelPriceDal.Add(fuelPrice);
+        //    return new SuccessResult("Yakıt fiyatı başarıyla eklendi.");
+        //}
 
         public IResult Add(FuelPriceCreateDto dto)
         {

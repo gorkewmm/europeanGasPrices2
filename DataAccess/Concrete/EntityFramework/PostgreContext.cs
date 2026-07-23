@@ -22,9 +22,9 @@ namespace DataAccess.Concrete.EntityFramework
             if (!optionsBuilder.IsConfigured)
             {
                 // Sabit bağlantı adresi (Fallback)
-                optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=EpdkByCountries;Username=postgres;Password=4321;");
+                //optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=EpdkByCountries;Username=postgres;Password=4321;");
                 //optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=EpdkByCountries;Username=postgres;Password=2021;");
-                //optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=EpdkByCountries;Username=postgres;Password=2023;");
+                optionsBuilder.UseNpgsql("Host=127.0.0.1;Port=5432;Database=EpdkByCountries;Username=postgres;Password=2023;");
             }
         }
 
